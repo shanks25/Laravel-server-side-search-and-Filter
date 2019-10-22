@@ -11,56 +11,58 @@
 </head>
 <body>
   <div class="container">    
-     <br />
-     <h3 align="center">Laravel 5.8 - Custom Search in Datatables using Ajax</h3>
-     <br />
-     <br />
-     <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <select name="filter_gender" id="filter_gender" class="form-control">
-                    <option value="0">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <select name="filter_country" id="filter_country" class="form-control">
-                    <option value="0">Select Country</option>
-                    @foreach($country_name as $country)
-
-                    <option value="{{ $country->Country }}">{{ $country->Country }}</option>
-
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group" align="center">
-                <button type="button" name="filter" id="filter" class="btn btn-info">Filter</button>
-
-                <button type="button" name="reset" id="reset" class="btn btn-default">Reset</button>
-            </div>
+   <br />
+   <h3 align="center">Laravel 5.8 - Custom Search in Datatables using Ajax</h3>
+   <br />
+   <br />
+   <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <form action="{{ route('customsearch.store') }}" method="POST">
+           @csrf
+           <div class="form-group">
+            <select name="gender" id="filter_gender" class="form-control">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
         </div>
-        <div class="col-md-4"></div>
-    </div>
-    <br />
-    <div class="table-responsive">
-        <table id="customer_data" class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Customer Name</th>
-                    <th>Gender</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>Postal Code</th>
-                    <th>Country</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-    <br />
-    <br />
+        <div class="form-group">
+            <select name="country" id="filter_country" class="form-control">
+                <option value="">Select Country</option>
+                @foreach($country_name as $country)
+
+                <option value="{{ $country->Country }}">{{ $country->Country }}</option>
+
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group" align="center">
+            <button type="submit" name="filter" id="filter" class="btn btn-info">Download</button>  
+            <button type="button" name="reset" id="reset" class="btn btn-default">Reset</button>
+        </div>
+    </form> 
+</div>
+<div class="col-md-4"></div>
+</div>
+<br />
+<div class="table-responsive">
+    <table id="customer_data" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Postal Code</th>
+                <th>Country</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<br />
+<br />
 </div>
 </body>
 </html>
@@ -117,40 +119,40 @@
             filtervals() ;
         }); 
 
-
         function filtervals()
         {
             var filter_gender = $('#filter_gender').val();
             var filter_country = $('#filter_country').val();
             
-            if(filter_gender != 0 &&  filter_country != 0)
+            if(filter_gender != '' &&  filter_country != '')
             { 
                 $('#customer_data').DataTable().destroy();
                 fill_datatable(filter_gender, filter_country);
             }
-            else if( filter_gender != 0)
+            else if( filter_gender != '')
             { 
                 $('#customer_data').DataTable().destroy();
                 fill_datatable(filter_gender,null);
             }
-            else if( filter_country != 0)
+            else if( filter_country != '')
             { 
                 $('#customer_data').DataTable().destroy();
                 fill_datatable(null,filter_country);
             }
-            else {
-             $('#customer_data').DataTable().destroy();
-             fill_datatable();
-         }
+            else 
+            {
+               $('#customer_data').DataTable().destroy();
+               fill_datatable();
+           }
 
-     } 
+       } 
 
-     $('#reset').click(function(){
+       $('#reset').click(function(){
         $('#filter_gender').val('');
         $('#filter_country').val('');
         $('#customer_data').DataTable().destroy();
         fill_datatable();
     });
 
- });
+   });
 </script>

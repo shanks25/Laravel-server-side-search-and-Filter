@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Exports\UsersExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class CustomerController extends Controller
 {
@@ -30,7 +33,7 @@ class CustomerController extends Controller
         ->where('Gender', $request->filter_gender)
         ->get();
     }
-   else if(!empty($request->filter_country))
+    else if(!empty($request->filter_country))
     {
         $data = Customer::select('CustomerName', 'Gender', 'Address', 'City', 'PostalCode', 'Country')
         ->where('Country', $request->filter_country)
@@ -55,9 +58,9 @@ return view('custom_search', compact('country_name'));
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+
     }
 
     /**
@@ -68,8 +71,9 @@ return view('custom_search', compact('country_name'));
      */
     public function store(Request $request)
     {
-        //
-    }
+     
+       return Excel::download(new UsersExport, 'user.xlsx');
+   }
 
     /**
      * Display the specified resource.
